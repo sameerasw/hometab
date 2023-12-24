@@ -6,13 +6,13 @@ let para = document.getElementById('title');
 let list = document.querySelector('ul');
 const numbers = "0123456789";
 let interval = null;
+var provider;
 
 let previousImageUrl = '';
 h1.style.opacity = 1;
 
 function bookmarkTitle() {
     //display bookmark title on hover from data-title onto the para
-    let link = document.querySelector('a');
     list.addEventListener('mouseover', (e) => {
         if (e.target.classList.contains('link')) {
             para.style.scale = 1;
@@ -30,21 +30,21 @@ function bookmarkTitle() {
             // background.style.rotate = '0deg';
         }
     });
-}
+    }
 
-function textanimate (word) {
-    let iterations = 0;
-    const duration = 500 / word.length;
+    function textanimate (word) {
+        let iterations = 0;
+        const duration = 500 / word.length;
 
-    //if the new word is the same as the old one, do nothing
-    // if (text.innerText === word) return;
+        //if the new word is the same as the old one, do nothing
+        // if (text.innerText === word) return;
 
-    clearInterval(interval);
+        clearInterval(interval);
 
-    interval = setInterval(() => {
-        h1.innerText = h1.innerText
-        .split("")
-        .map((number,index) => {
+        interval = setInterval(() => {
+            h1.innerText = h1.innerText
+            .split("")
+            .map((_,index) => {
             if(index < iterations){
                 return word[index];
             }
@@ -64,7 +64,20 @@ function textanimate (word) {
     } , duration);
 }
 
-function getImg() {
+function getImg(provider) {
+    console.log('got provider :' + provider)
+    //get image from provider
+    if (provider === 'unsplash') {
+        unsplash();
+    } else if (provider === 'pexels') {
+        pexels();
+    } else {
+        // unsplash();
+    }
+}
+
+function unsplash() {
+    console.log('Using unsplash api');
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://api.unsplash.com/photos/random?client_id=fcx0TMO2LYjLO2oAWgMfp4l2w1d6IXSNVW9ORaamji0');
     xhr.onload = function() {
@@ -80,40 +93,37 @@ function getImg() {
     xhr.send();
 }
 
+function pexels() {
+    console.log('Using pexels api');
+    let api = 'INB1uHU6THskPr6OnPO7sqW7Yaf9QPFecSDsc8AHf0KT7Tp9zmWuK6uW';
+    let url = `https://api.pexels.com/v1/curated?per_page=1&page=${Math.floor(Math.random() * 10) + 1}`;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.setRequestHeader('Authorization', api);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            let imageUrl = response.photos[0].src.original;
+            //save image to local storage
+            chrome.storage.local.set({'image': imageUrl}, function() {
+                // console.log('saved image', imageUrl);
+            });
+        }
+    };
+    xhr.send();
+}
+
 
 function randomWallpaper() {
+    console.log('randomWallpaper() got provider :' + provider);
     //get image from local storage
+
     chrome.storage.local.get('image', function(data) {
         let imageUrl = data.image;
         background.style.backgroundImage = `url(${imageUrl})`;
     });
     background.style.backdropFilter = 'blur(30px) brightness(0)';
-        getImg();
-    
-    //check if the both images are same and if so, use the public api to get a new image
-    if (previousImageUrl === background.style.backgroundImage) {
-        //get from pexels api
-        console.log('Using pexels api');
-        let api = 'INB1uHU6THskPr6OnPO7sqW7Yaf9QPFecSDsc8AHf0KT7Tp9zmWuK6uW';
-        let url = `https://api.pexels.com/v1/curated?per_page=1&page=${Math.floor(Math.random() * 10) + 1}`;
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        xhr.setRequestHeader('Authorization', api);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                let response = JSON.parse(xhr.responseText);
-                let imageUrl = response.photos[0].src.original;
-                //save image to local storage
-                chrome.storage.local.set({'image': imageUrl}, function() {
-                    // console.log('saved image', imageUrl);
-                });
-            }
-        };
-        xhr.send();
-    } else {
-        previousImageUrl = background.style.backgroundImage;
-        console.log('Using unsplash api');
-    }
+    getImg(provider);
 }
 
 function time() {
@@ -183,6 +193,25 @@ function updateTime() {
     h1.innerHTML = time();
 }
 
+function getProvider() {
+    let providerGot = prompt('Enter provider (Default: unsplash)');
+    console.log(providerGot);
+    if (providerGot === 'unsplash') {
+        chrome.storage.local.set({'provider': providerGot}, function() {
+            console.log('saved provider', providerGot);
+        });
+    } else if (providerGot === 'pexels') {
+        chrome.storage.local.set({'provider': providerGot}, function() {
+            console.log('saved provider', providerGot);
+        });
+    } else {
+        chrome.storage.local.set({'provider': 'unsplash'}, function() {
+            console.log('saved default provider', 'unsplash');
+        });
+    }
+    return providerGot;
+}
+
 function gridSize() {
     //ask user for grid size
     let gridSizeX = prompt('Enter grid size in columns (Default: 8)');
@@ -191,7 +220,7 @@ function gridSize() {
     chrome.storage.local.set({'gridSizeX': gridSizeX}, function() {
         // console.log('saved gridSizeX', gridSizeX);
     });
-
+    getProvider();
 }
 
 //listen for middle mouse click on background
@@ -207,16 +236,29 @@ document.addEventListener('DOMContentLoaded', function() {
     //try to read grid size from local storage or ask user for input
     try {
         chrome.storage.local.get('gridSizeX', function(data) {
+            console.log('grid size : ',data.gridSizeX);
             let gridSizeX = data.gridSizeX;
             list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
         });
     } catch (error) {
         gridSize();
     }
-    bookmarkList();
 
-    //wait for page to load
-    randomWallpaper();
+    //try to read provider from local storage or ask user for input
+    try {
+        chrome.storage.local.get('provider', function(data) {
+            console.log('provider from storage : ',data.provider);
+            provider = data.provider;
+        });
+    } catch (error) {
+        provider = getProvider();
+    }
+
+    bookmarkList();
+    setTimeout(
+        randomWallpaper,
+        1000
+    )
     setTimeout(addBrightness, 500);
     
     // console.log('randomWallpaper()');
