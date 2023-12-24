@@ -5,7 +5,7 @@ body{
     justify-content: center;
     display: flex;
     flex-direction: column;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Product Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
     font-size: 1.5rem;
     margin: 0;
     padding: 0;
@@ -14,13 +14,37 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     backdrop-filter: blur(30px) brightness(0);
+    overflow: hidden;
+    /* scale: 0.2; */
+    transition: all 0.5s ease-in-out;
+}
+
+#bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    transition: all 1s ease-out;
+    z-index: -1;
+    background-color: black;
+    color: aliceblue;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(30px) brightness(0);
+    overflow: hidden;
     /* transition: all 3s ease-in-out; */
 }
 
 h1{
-    font-size: 10rem;
-    font-weight: 400;
-    margin: 0;
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 2%;
     padding: 0;
     opacity: 0;
     transition: all 1s ease-in-out;
@@ -38,31 +62,33 @@ ul{
     margin: 0 20%;
     padding: 1rem;
     opacity: 1;
-    max-height: 50vh;
+    max-height: 60vh;
     width: 60%;
     overflow-y: scroll;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     border-radius: 20px;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
-    /* background-color: #00000044; */
-    backdrop-filter: blur(30px) !important;
+    background-color: #00000022;
+    backdrop-filter: blur(20px) !important;
     li{
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
         transition: all 1s ease-in-out;
+        /* backdrop-filter: blur(10px) !important; */
         a{
             text-decoration: none;
             color: aliceblue;
-            font-size: 0;
+            font-size: 1rem;
             font-weight: 400;
             margin: 0;
             padding: 0;
             opacity: 1;
             /* width: 50%; */
-            background-color: black;
+            background-color: #222222cc;
+            /* backdrop-filter: blur(30px) !important; */
             border-radius: 20px;
             padding: 1rem;
             display: inline-block;
@@ -70,8 +96,14 @@ ul{
             text-wrap:nowrap;
             align-items: center;
             justify-content: center;
-            display: flex;
-            flex-direction:column;
+            display:flex;
+            flex-direction: column;
+            p{
+                position: absolute;
+                top: 100%;
+                scale: 0;
+                transition: all 0.5s ease-in-out;
+            }
             img{
                 /* padding: 2%; */
                 margin: 10%;
@@ -83,10 +115,12 @@ ul{
             }
         }
         a:hover{
-            color: #000000;
-            background-color: aliceblue;
+            color: #ffffff;
+            background-color: rgb(255, 255, 255);
             scale: 1.1;
-            /* font-size: 1rem; */
+            p{
+                scale: 1;
+            }
             img{
                 scale: 1.5;
             }
@@ -94,6 +128,14 @@ ul{
         /* opacity: 0; */
     }
     
+}
+
+#title{
+    opacity: 1;
+    transition: all 0.25s ease-in-out;
+    scale: 1;
+    text-align: center;
+    font-weight: lighter;
 }
 
 us::-webkit-scrollbar {
