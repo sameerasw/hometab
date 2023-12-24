@@ -183,10 +183,36 @@ function updateTime() {
     h1.innerHTML = time();
 }
 
+function gridSize() {
+    //ask user for grid size
+    let gridSizeX = prompt('Enter grid size in columns (Default: 8)');
+    list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
+    //save grid size to local storage
+    chrome.storage.local.set({'gridSizeX': gridSizeX}, function() {
+        // console.log('saved gridSizeX', gridSizeX);
+    });
 
+}
+
+//listen for middle mouse click on background
+background.addEventListener('auxclick', (e) => {
+    if (e.button === 1) {
+        // console.log('middle mouse click');
+        gridSize();
+    }    
+});
 
 //start the script after the page loads
 document.addEventListener('DOMContentLoaded', function() {
+    //try to read grid size from local storage or ask user for input
+    try {
+        chrome.storage.local.get('gridSizeX', function(data) {
+            let gridSizeX = data.gridSizeX;
+            list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
+        });
+    } catch (error) {
+        gridSize();
+    }
     bookmarkList();
 
     //wait for page to load
