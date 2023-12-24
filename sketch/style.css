@@ -24,4 +24,84 @@ h1{
     padding: 0;
     opacity: 0;
     transition: all 1s ease-in-out;
+    text-align: center;
+}
+
+ul{
+    transition: all 1s ease-in-out;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20%;
+    padding: 1rem;
+    opacity: 1;
+    max-height: 50vh;
+    width: 60%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 20px;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    /* background-color: #00000044; */
+    backdrop-filter: blur(30px) !important;
+    li{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        transition: all 1s ease-in-out;
+        a{
+            text-decoration: none;
+            color: aliceblue;
+            font-size: 0;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            opacity: 1;
+            /* width: 50%; */
+            background-color: black;
+            border-radius: 20px;
+            padding: 1rem;
+            display: inline-block;
+            transition: all 0.25s ease-in-out;
+            text-wrap:nowrap;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction:column;
+            img{
+                /* padding: 2%; */
+                margin: 10%;
+                width: 60%;
+                height:60%;
+                object-fit: cover;
+                opacity: 1;
+                transition: all 0.25s ease-in-out;
+            }
+        }
+        a:hover{
+            color: #000000;
+            background-color: aliceblue;
+            scale: 1.1;
+            /* font-size: 1rem; */
+            img{
+                scale: 1.5;
+            }
+        }
+        /* opacity: 0; */
+    }
+    
+}
+
+us::-webkit-scrollbar {
+    display: none;
+  }
+
+#bookmarks{
+    scale: 0.2;
+    opacity: 0;
+    transition: all 1s ease-in-out;
 }

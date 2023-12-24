@@ -1,6 +1,8 @@
 let body = document.querySelector('body');
 let h1 = document.querySelector('h1');
 let bookmarks = document.querySelector('#bookmarks');
+let para = document.querySelector('p');
+let list = document.querySelector('ul');
 const numbers = "0123456789";
 let interval = null;
 
@@ -81,25 +83,48 @@ function time() {
 }
 
 function bookmarkList() {
+    let icons = [];
     //get bookmarks
-    chrome.bookmarks.getTree(function(bookmarks) {
-        process_bookmark(bookmarks);
+    // chrome.bookmarks.getTree(function(bookmarks) {
+    //     process_bookmark(bookmarks);
+    // });
+    chrome.bookmarks.getSubTree('206', function(bookmarks) {
+        console.log(bookmarks);
+        icons = fetchBookmarkIcons(bookmarks);
+        process_bookmark(bookmarks,icons);
     });
+    //bookmarks apears animated
+    bookmarks.style.scale = 1;
+    bookmarks.style.opacity = 1;
 }
 
 
-function process_bookmark(bookmarks) {
-
-    for (var i =0; i < bookmarks.length; i++) {
-        var bookmark = bookmarks[i];
-        if (bookmark.url) {
-            console.log("bookmark: "+ bookmark.title + " ~  " + bookmark.url);
+function fetchBookmarkIcons(bookmarks) {
+    //fetch icons for bookmarks
+    let icons = [];
+    bookmarks[0].children.forEach(bookmark => {
+        try {
+            icons.push('https://s2.googleusercontent.com/s2/favicons?domain_url=' + bookmark.url + '&sz=256');
+        } catch (error) {
+            icons.push('https://s2.googleusercontent.com/s2/favicons?domain_url=' + bookmark.children[0].url + '&sz=256');
         }
-
-        if (bookmark.children) {
-            process_bookmark(bookmark.children);
+        //if it fails to get icon, use default icon
+        if (icons[bookmarks[0].children.indexOf(bookmark)] === 'https://s2.googleusercontent.com/s2/favicons?domain_url=&sz=256') {
+            icons[bookmarks[0].children.indexOf(bookmark)] = 'https://images.vexels.com/media/users/3/223055/isolated/lists/eb3fcec56c95c2eb7ded9201e51550a2-bookmark-icon-flat.png';
         }
+    });
+    console.log(icons);
+    return icons;
+}
+
+
+function process_bookmark(bookmarks,icons) {
+    //process bookmarks - get each child and add to list
+    // para.innerHTML = bookmarks[0].title;
+    list.innerHTML = bookmarks[0].children.map(bookmark => {
+        return `<li><a href="${bookmark.url}"><img src="${icons[bookmarks[0].children.indexOf(bookmark)]}"><p>${bookmark.title}</p></a></li>`;
     }
+    ).join('');
 }
 
 function addBrightness() {
@@ -114,7 +139,7 @@ function updateTime() {
     h1.innerHTML = time();
 }
 
-// bookmarkList();
+bookmarkList();
 
 //wait for page to load
 randomWallpaper();
