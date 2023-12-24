@@ -13,6 +13,8 @@ body{
     width: 100vw;
     background-repeat: no-repeat;
     background-size: cover;
+    backdrop-filter: blur(30px) brightness(0);
+    /* transition: all 3s ease-in-out; */
 }
 
 h1{
@@ -20,4 +22,6 @@ h1{
     font-weight: 400;
     margin: 0;
     padding: 0;
+    opacity: 0;
+    transition: all 1s ease-in-out;
 }

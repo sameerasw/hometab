@@ -1,7 +1,43 @@
 let body = document.querySelector('body');
 let h1 = document.querySelector('h1');
+let bookmarks = document.querySelector('#bookmarks');
+const numbers = "0123456789";
+let interval = null;
 
 let previousImageUrl = '';
+h1.style.opacity = 1;
+
+function textanimate (word) {
+    let iterations = 0;
+    const duration = 500 / word.length;
+
+    //if the new word is the same as the old one, do nothing
+    // if (text.innerText === word) return;
+
+    clearInterval(interval);
+
+    interval = setInterval(() => {
+        h1.innerText = h1.innerText
+        .split("")
+        .map((number,index) => {
+            if(index < iterations){
+                return word[index];
+            }
+
+            let final = numbers[Math.floor(Math.random() * 10)];
+
+            return final;
+
+        })
+        .join("");
+        iterations += 1;
+        console.log('textanimate()');
+        if(h1.innerText === word){
+            //stop the function
+            clearInterval(interval);
+        }
+    } , duration);
+}
 
 function getImg() {
     var xhr = new XMLHttpRequest();
@@ -26,6 +62,7 @@ function randomWallpaper() {
         let imageUrl = data.image;
         body.style.backgroundImage = `url(${imageUrl})`;
     });
+    body.style.backdropFilter = 'blur(30px) brightness(0)';
     getImg();
 }
 
@@ -34,17 +71,22 @@ function time() {
     let date = new Date();
     let hours = date.getHours();
     let minutes = date.getMinutes();
+    // let seconds = date.getSeconds();
     hours = hours % 12;
     hours = hours ? hours : 12;
     minutes = minutes < 10 ? '0'+ minutes : minutes;
     hours = hours < 10 ? '0'+ hours : hours;
     let time = `${hours}:${minutes}`;
-    h1.innerHTML = time;
+    return time;
 }
 
-randomWallpaper();
-setInterval(time, 3000);
-console.log('randomWallpaper()');
+function bookmarkList() {
+    //get bookmarks
+    chrome.bookmarks.getTree(function(bookmarks) {
+        process_bookmark(bookmarks);
+    });
+}
+
 
 function process_bookmark(bookmarks) {
 
@@ -60,7 +102,26 @@ function process_bookmark(bookmarks) {
     }
 }
 
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   console.log("listing bookmarks: " );
-//   chrome.bookmarks.getTree( process_bookmark );
-// });
+function addBrightness() {
+    body.style.transition = 'all 1s ease-in-out';
+    body.style.backdropFilter = 'blur(0px) brightness(0.5)';
+    // body.style.backdropFilter = 'blur(0px) brightness(0.8)';
+}
+
+function updateTime() {
+    //update time once 5 seconds
+    // textanimate('00:00');
+    h1.innerHTML = time();
+}
+
+// bookmarkList();
+
+//wait for page to load
+randomWallpaper();
+setTimeout(addBrightness, 500);
+
+console.log('randomWallpaper()');
+//update time once 5 seconds
+// textanimate('00:00');
+textanimate(time());
+setInterval(updateTime , 5000);
