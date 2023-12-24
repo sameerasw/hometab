@@ -6,3 +6,9 @@ My own new tab page for chromium.
 - [x] Unsplash random image
 - [ ] Bookmark
 - [ ] Theming
+
+inspirations :
+- [YouTube tutorial by The Coding Train - Chrome Extensions](https://youtube.com/playlist?list=PLRqwX-V7Uu6bL9VOMT65ahNEri9uqLWfS&si=IeGLXIIPj4KzQA_X)
+
+Discussion:
+- [TIDWIB](https://t.me/tidwib)
