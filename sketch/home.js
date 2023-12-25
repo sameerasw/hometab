@@ -18,44 +18,46 @@ function bookmarkTitle() {
             para.style.scale = 1;
             para.innerHTML = e.target.dataset.title;
             background.style.backdropFilter = 'blur(0px) brightness(0.2)';
-            // background.style.scale = 1.1;
-            // background.style.rotate = '2deg';
+            background.style.scale = 1.1;
+            background.style.rotate = '2deg';
         }
     });
     list.addEventListener('mouseout', (e) => {
         if (e.target.classList.contains('link')) {
             para.style.scale = 0;
             background.style.backdropFilter = 'blur(1px) brightness(0.5)';
-            // background.style.scale = 1;
-            // background.style.rotate = '0deg';
+            background.style.scale = 1;
+            background.style.rotate = '0deg';
         }
     });
     }
 
-    function textanimate (word) {
-        let iterations = 0;
-        const duration = 500 / word.length;
+function textanimate (word) {
+    let iterations = 0;
+    const duration = 250 / word.length;
 
-        //if the new word is the same as the old one, do nothing
-        // if (text.innerText === word) return;
+    //if the new word is the same as the old one, do nothing
+    // if (text.innerText === word) return;
 
-        clearInterval(interval);
+    clearInterval(interval);
 
-        interval = setInterval(() => {
-            h1.innerText = h1.innerText
-            .split("")
-            .map((_,index) => {
-            if(index < iterations){
-                return word[index];
-            }
+    interval = setInterval(() => {
+        h1.innerText = h1.innerText
+        .split("")
+        .map((_,index) => {
+        if(index < iterations){
+            return word[index];
+        } else if (index === 2){
+            return ':';
+        }
 
-            let final = numbers[Math.floor(Math.random() * 10)];
+        let final = numbers[Math.floor(Math.random() * 10)];
 
-            return final;
+        return final;
 
         })
         .join("");
-        iterations += 1;
+        iterations += 0.25;
         // console.log('textanimate()');
         if(h1.innerText === word){
             //stop the function
@@ -72,7 +74,7 @@ function getImg(provider) {
     } else if (provider === 'pexels') {
         pexels();
     } else {
-        // unsplash();
+        unsplash();
     }
 }
 
@@ -117,7 +119,6 @@ function pexels() {
 function randomWallpaper() {
     console.log('randomWallpaper() got provider :' + provider);
     //get image from local storage
-
     chrome.storage.local.get('image', function(data) {
         let imageUrl = data.image;
         background.style.backgroundImage = `url(${imageUrl})`;
@@ -142,21 +143,15 @@ function time() {
 
 function bookmarkList() {
     let icons = [];
-    //get bookmarks
-    // chrome.bookmarks.getTree(function(bookmark3) {
-    //     // process_bookmark(bookmark3);
-    //     console.log(bookmark3);
-    // });
+    //replace '1' with your prefered bookmark folder id
     chrome.bookmarks.getSubTree('1', function(bookmarks) {
         // console.log(bookmarks);
         icons = fetchBookmarkIcons(bookmarks);
         process_bookmark(bookmarks,icons);
     });
-    //bookmarks apears animated
     bookmarks.style.scale = 1;
     bookmarks.style.opacity = 1;
 }
-
 
 function fetchBookmarkIcons(bookmarks) {
     //fetch icons for bookmarks
@@ -165,35 +160,31 @@ function fetchBookmarkIcons(bookmarks) {
         try {
             icons.push('https://s2.googleusercontent.com/s2/favicons?domain_url=' + bookmark.url + '&sz=256');
         } catch (error) {
+            //fallback icon (broken atm)
             icons[bookmarks[0].children.indexOf(bookmark)] = 'https://images.vexels.com/media/users/3/223055/isolated/lists/eb3fcec56c95c2eb7ded9201e51550a2-bookmark-icon-flat.png';
         }
     });
-    // console.log(icons);
     return icons;
 }
 
-
 function process_bookmark(bookmarks,icons) {
+    //process bookmarks and display them inside html
     list.innerHTML = bookmarks[0].children.map(bookmark => {
         return `<li data-title="${bookmark.title}"><a href="${bookmark.url}" data-title="${bookmark.title}" class="link"><img src="${icons[bookmarks[0].children.indexOf(bookmark)]}" class="link" data-title="${bookmark.title}"></a></li>`;
     }
     ).join('');
+
 }
 
-function addBrightness() {
-    bookmarks.style.scale = 1;
+function welcomeAnimation() {
+    //welcome animation
+    bookmarks.style.bottom = '0px';
     background.style.transition = 'all 1s ease-in-out';
     background.style.filter = 'blur(0px) brightness(0.5)';
-    // background.style.backdropFilter = 'blur(0px) brightness(0.8)';
-}
-
-function updateTime() {
-    //update time once 5 seconds
-    // textanimate('00:00');
-    h1.innerHTML = time();
 }
 
 function getProvider() {
+    //ask user for provider (unsplash or pexels) or use default (unsplash)
     let providerGot = prompt('Enter provider (Default: unsplash)');
     console.log(providerGot);
     if (providerGot === 'unsplash') {
@@ -213,18 +204,22 @@ function getProvider() {
 }
 
 function gridSize() {
-    //ask user for grid size
+    //ask user for grid size or use default (8)
     let gridSizeX = prompt('Enter grid size in columns (Default: 8)');
     list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
     //save grid size to local storage
     chrome.storage.local.set({'gridSizeX': gridSizeX}, function() {
-        // console.log('saved gridSizeX', gridSizeX);
     });
     getProvider();
 }
 
+function timeRequest() {
+    //update time
+    h1.innerText = time();
+}
+
 //listen for middle mouse click on background
-background.addEventListener('auxclick', (e) => {
+body.addEventListener('auxclick', (e) => {
     if (e.button === 1) {
         // console.log('middle mouse click');
         gridSize();
@@ -259,13 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
         randomWallpaper,
         1000
     )
-    setTimeout(addBrightness, 500);
+    setTimeout(welcomeAnimation, 500);
     
     // console.log('randomWallpaper()');
     //update time once 5 seconds
     // textanimate('00:00');
     textanimate(time());
-    setInterval(updateTime , 5000);
+    setInterval(timeRequest, 5000);
     
     bookmarkTitle();
 

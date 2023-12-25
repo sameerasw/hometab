@@ -9,5 +9,10 @@
         "bookmarks",
         "tabs",
         "storage"
-    ]
+    ],
+    "icons": {
+        "16": "/sketch/img/icon-bitty.png",
+        "48": "/sketch/img/icon-small.png",
+        "128": "/sketch/img/icon-large.png"
+    }
 }
