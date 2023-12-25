@@ -14,17 +14,25 @@
         <div class="bottomPanel">
             <form action="submit">
                 <fieldset>
-                    <legend>Grid Size</legend>
+                    <label for="gridSize">Grid Size</label>
                     <input type="number" id="gridSize" name="gridSize" min="1" max="10" value="5">
                 </fieldset>
                 <fieldset>
-                    <legend>Provider</legend>
+                    <label for="provider">Provider</label>
                     <select name="provider" id="provider">
                         <option value="unsplash">Unsplash</option>
                         <option value="pexels">Pexels</option>
                     </select>
                 </fieldset>
-                <input type="submit" value="Update">
+                <fieldset>
+
+                </fieldset>
+                <fieldset>
+                    <input type="submit" value="✓ Update" id="update">
+                </fieldset>
+                <fieldset>
+                    <input type="reset" value="Pause" id="pause">
+                </fieldset>
             </form>
         </div>
     </div>

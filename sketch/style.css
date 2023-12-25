@@ -184,7 +184,7 @@ us::-webkit-scrollbar {
 
 
 .edit{
-    scale: 0.6 !important;
+    scale: 0.7 !important;
     border-radius: 40px !important;
     left: 0 !important;
     margin-left: 0 !important;
@@ -200,7 +200,7 @@ us::-webkit-scrollbar {
     object-fit: cover;
     transition: all 1s ease-out;
     z-index: -100;
-    background-color: #222222;
+    background-color: #111;
     color: aliceblue;
     align-items: center;
     justify-content: center;
@@ -221,15 +221,14 @@ us::-webkit-scrollbar {
 
 form{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 1rem;
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
     justify-content: center;
     transition: all 1s ease-in-out;
     position: absolute;
     bottom: 2%;
-    width: 50%;
-    margin: 0 25%;
+    width: 70%;
+    margin: 0 15%;
     z-index: 100;
     color: aliceblue;
     align-items: center;
@@ -240,60 +239,58 @@ form{
     transition: all 0.5s ease-in-out;
     fieldset{
         border-radius: 20px;
-        width: 70%;
+        width: 100%;
         height: 70%;
+        border: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-wrap:nowrap;
     }
     input{
-        margin: 5%;
+        margin: 15%;
         padding: 5%;
         border-radius: 20px;
         border: none;
-        background-color: #00000022;
+        background-color: #000000bb;
         color: aliceblue;
         font-size: 1rem;
         font-weight: 400;
         text-align: center;
-        width: 90%;
+        width: 60%;
         transition: all 0.25s ease-in-out;
         &:focus{
             background-color: #00000044;
             color: aliceblue;
+            scale: 1.1;
+        }
+        &:hover{
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
             scale: 1.1;
         }
     }
     select{
-        margin: 5%;
+        margin: 15%;
         padding: 5%;
         border-radius: 20px;
         border: none;
-        background-color: #00000022;
+        background-color: #000000bb;
         color: aliceblue;
         font-size: 1rem;
         font-weight: 400;
         text-align: center;
-        width: 90%;
+        width: 60%;
         transition: all 0.25s ease-in-out;
         &:focus{
             background-color: #00000044;
             color: aliceblue;
             scale: 1.1;
         }
-    }
-    button{
-        margin: 1%;
-        padding: 1%;
-        border-radius: 20px;
-        border: none;
-        background-color: #00000022;
-        color: aliceblue;
-        font-size: 1rem;
-        font-weight: 400;
-        text-align: center;
-        width: 50%;
-        transition: all 0.25s ease-in-out;
-        &:focus{
-            background-color: #00000044;
-            color: aliceblue;
+        &:hover{
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
             scale: 1.1;
         }
     }

@@ -9,6 +9,8 @@ let form = document.querySelector('form');
 const numbers = "0123456789";
 let interval = null;
 var provider;
+var backgroundPaused;
+var previousImage;
 
 let previousImageUrl = '';
 h1.style.opacity = 1;
@@ -69,7 +71,7 @@ function textanimate (word) {
 }
 
 function getImg(provider) {
-    console.log('got provider :' + provider)
+    console.log('got provider :' + provider);
     //get image from provider
     if (provider === 'unsplash') {
         unsplash();
@@ -123,10 +125,22 @@ function randomWallpaper() {
     //get image from local storage
     chrome.storage.local.get('image', function(data) {
         let imageUrl = data.image;
-        background.style.backgroundImage = `url(${imageUrl})`;
+        //save it as previous image to local storage
+        chrome.storage.local.set({'previousImage': imageUrl}, function() {
+            // console.log('saved previousImage', imageUrl);
+        } );
+        //set background image to the image from local storage(use orevios image if paused)
+        if (backgroundPaused) {
+            background.style.backgroundImage = data.image;
+        } else {
+            background.style.backgroundImage = `url(${imageUrl})`;
+        }
     });
     background.style.backdropFilter = 'blur(30px) brightness(0)';
-    getImg(provider);
+    //get img from provider if background is not paused
+    if (!backgroundPaused) {
+        getImg(provider);
+    }
 }
 
 function time() {
@@ -237,6 +251,10 @@ form.addEventListener('submit', (e) => {
     editMode();
 });
 
+form.addEventListener('reset', (e) => {
+    //pause wallpaper updating
+    pauseWallpaper();
+});
 
 function editMode() {
     //edit mode
@@ -258,18 +276,49 @@ function editMode() {
         chrome.storage.local.get('provider', function(data) {
             form.elements.provider.value = data.provider;
         });
+        //load paused state
+        if (backgroundPaused) {
+            document.querySelector('#pause').value = '▶ Resume';
+        } else {
+            document.querySelector('#pause').value = '⏸ Pause';
+        }
 
     }
 }
 
-//enter edit mode when pressing 'e'
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'e') {
-        editMode();
+function pauseWallpaper() {
+    //pause background
+    if (backgroundPaused) {
+        backgroundPaused = false;
+        //save value to local storage
+        chrome.storage.local.set({'backgroundPaused': backgroundPaused}, function() {
+            console.log('saved backgroundPaused', backgroundPaused);
+        });
+        //set the text of the button to "pause"
+        document.querySelector('#pause').value = 'pause';
+        //changeimage
+        randomWallpaper();
+    } else {
+        backgroundPaused = true;
+        //save value to local storage
+        chrome.storage.local.set({'backgroundPaused': backgroundPaused}, function() {
+            console.log('saved backgroundPaused', backgroundPaused);
+        });
+        //set the text of the button to "play"
+        document.querySelector('#pause').value = 'play';
+        //save the current background of the page to local storage
+        chrome.storage.local.set({'image': background.style.backgroundImage}, function() {
+            // console.log('saved image', background.style.backgroundImage);
+        } );
     }
-} );
+}
 
-//
+//enter edit mode when right click
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    editMode();
+});
+
 
 //start the script after the page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -292,6 +341,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } catch (error) {
         provider = getProvider();
+    }
+
+    //try to read backgroundPaused from local storage or set to false
+    try {
+        chrome.storage.local.get('backgroundPaused', function(data) {
+            console.log('backgroundPaused from storage : ',data.backgroundPaused);
+            backgroundPaused = data.backgroundPaused;
+        });
+    } catch (error) {
+        backgroundPaused = false;
     }
 
     bookmarkList();
