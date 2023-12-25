@@ -20,7 +20,7 @@ https://github.com/sameerasw/hometab/assets/68902530/e9d95512-d827-465d-917b-ac1
 - [x] Theming
 - [x] Custom grid size
 - [x] More settings
-- [ ] Custom API key input
+- [x] Custom API key input
 - [x] Pause wallpaper
 - [ ] Custom icons
 - [ ] History integration
