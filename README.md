@@ -4,11 +4,14 @@ My own new tab page for chromium. Right click to customize :)
 ### Default layout:
 ![image](https://github.com/sameerasw/hometab/assets/68902530/ebb60b46-49bb-4963-a823-4f1b0613ea09)
 
-### Edit overview (needs refinements):
-![image](https://github.com/sameerasw/hometab/assets/68902530/cc036c2c-2cb3-4393-9e5b-47bbbf419bee)
+### Edit overview:
+![image](https://github.com/sameerasw/hometab/assets/68902530/e4f994a1-9450-4816-ab38-5caaa872e884)
 
-### Demo (uoutdated)
-https://github.com/sameerasw/hometab/assets/68902530/5195303b-a52e-4bac-8e69-ea960a4e5b17
+
+### Demo:
+https://github.com/sameerasw/hometab/assets/68902530/e9d95512-d827-465d-917b-ac18844d8ec5
+
+
 
 
 - [x] Clock
