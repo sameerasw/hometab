@@ -1,5 +1,5 @@
 # hometab
-My own new tab page for chromium.
+My own new tab page for chromium. Press E to customize :)
 
 ![image](https://github.com/sameerasw/hometab/assets/68902530/ebb60b46-49bb-4963-a823-4f1b0613ea09)
 
@@ -11,7 +11,11 @@ https://github.com/sameerasw/hometab/assets/68902530/5195303b-a52e-4bac-8e69-ea9
 - [x] Bookmark
 - [x] Theming
 - [x] Custom grid size
-- [ ] More settings
+- [x] More settings
+- [ ] Custom API key input
+- [ ] Pause wallpaper
+- [ ] Custom icons
+- [ ] History integration
 
 inspirations :
 - [YouTube tutorial by The Coding Train - Chrome Extensions](https://youtube.com/playlist?list=PLRqwX-V7Uu6bL9VOMT65ahNEri9uqLWfS&si=IeGLXIIPj4KzQA_X)
