@@ -1,5 +1,5 @@
 # hometab
-My own new tab page for chromium. Press E to customize :)
+My own new tab page for chromium. Right click to customize :)
 
 ### Default layout:
 ![image](https://github.com/sameerasw/hometab/assets/68902530/ebb60b46-49bb-4963-a823-4f1b0613ea09)
@@ -18,7 +18,7 @@ https://github.com/sameerasw/hometab/assets/68902530/5195303b-a52e-4bac-8e69-ea9
 - [x] Custom grid size
 - [x] More settings
 - [ ] Custom API key input
-- [ ] Pause wallpaper
+- [x] Pause wallpaper
 - [ ] Custom icons
 - [ ] History integration
 
