@@ -4,6 +4,8 @@ let h1 = document.querySelector('h1');
 let bookmarks = document.querySelector('#bookmarks');
 let para = document.getElementById('title');
 let list = document.querySelector('ul');
+let container = document.querySelector('.container');
+let form = document.querySelector('form');
 const numbers = "0123456789";
 let interval = null;
 var provider;
@@ -203,28 +205,71 @@ function getProvider() {
     return providerGot;
 }
 
-function gridSize() {
-    //ask user for grid size or use default (8)
-    let gridSizeX = prompt('Enter grid size in columns (Default: 8)');
-    list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
-    //save grid size to local storage
-    chrome.storage.local.set({'gridSizeX': gridSizeX}, function() {
-    });
-    getProvider();
-}
-
 function timeRequest() {
     //update time
     h1.innerText = time();
 }
 
-//listen for middle mouse click on background
-body.addEventListener('auxclick', (e) => {
-    if (e.button === 1) {
-        // console.log('middle mouse click');
-        gridSize();
-    }    
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // console.log('form submitted');
+    //read and set grid size
+    let gridSizeX = form.elements.gridSize.value;
+    list.style.gridTemplateColumns = `repeat(${gridSizeX}, 1fr)`;
+    chrome.storage.local.set({'gridSizeX': gridSizeX}, function() {
+    });
+    //read and set provider
+    let providerGot = form.elements.provider.value;
+    if (providerGot === 'unsplash') {
+        chrome.storage.local.set({'provider': providerGot}, function() {
+            console.log('saved provider', providerGot);
+        });
+    } else if (providerGot === 'pexels') {
+        chrome.storage.local.set({'provider': providerGot}, function() {
+            console.log('saved provider', providerGot);
+        });
+    } else {
+        chrome.storage.local.set({'provider': 'unsplash'}, function() {
+            console.log('saved default provider', 'unsplash');
+        });
+    }
+    //exit edit mode
+    editMode();
 });
+
+
+function editMode() {
+    //edit mode
+    // body.style.classList.add('edit');
+    //add or remove "edit" class to the body to toggle edit mode
+    if (container.classList.contains('edit')) {
+        container.classList.remove('edit');
+        background.classList.remove('edit');
+        h1.classList.remove('edit');
+    } else {
+        container.classList.add('edit');
+        background.classList.add('edit');
+        h1.classList.add('edit');
+        //set form grid size input to current grid size
+        chrome.storage.local.get('gridSizeX', function(data) {
+            form.elements.gridSize.value = data.gridSizeX;
+        });
+        //set form provider input to current provider
+        chrome.storage.local.get('provider', function(data) {
+            form.elements.provider.value = data.provider;
+        });
+
+    }
+}
+
+//enter edit mode when pressing 'e'
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'e') {
+        editMode();
+    }
+} );
+
+//
 
 //start the script after the page loads
 document.addEventListener('DOMContentLoaded', function() {

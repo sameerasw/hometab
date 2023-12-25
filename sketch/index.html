@@ -9,6 +9,25 @@
     <link rel="icon" href="/sketch/img/icon-bitty.png" type="image/png"/>
 </head>
 <body>
+    <div class="canvas">
+        <h3>Customize Your Home</h3>
+        <div class="bottomPanel">
+            <form action="submit">
+                <fieldset>
+                    <legend>Grid Size</legend>
+                    <input type="number" id="gridSize" name="gridSize" min="1" max="10" value="5">
+                </fieldset>
+                <fieldset>
+                    <legend>Provider</legend>
+                    <select name="provider" id="provider">
+                        <option value="unsplash">Unsplash</option>
+                        <option value="pexels">Pexels</option>
+                    </select>
+                </fieldset>
+                <input type="submit" value="Update">
+            </form>
+        </div>
+    </div>
     <div id="bg"></div>
         <h1>00:00</h1>
     <div class="container">
